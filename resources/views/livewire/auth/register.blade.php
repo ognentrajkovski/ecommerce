@@ -34,7 +34,7 @@ $register = function (RegisterUserAction $registerUserAction) {
 
     Auth::login($user);
 
-    $this->redirect('/', navigate: true);
+    $this->redirectRoute('market.index');
 };
 ?>
 

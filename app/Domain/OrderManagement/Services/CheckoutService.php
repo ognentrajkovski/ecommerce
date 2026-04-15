@@ -32,7 +32,9 @@ class CheckoutService
                 throw new RuntimeException("Cart is empty");
             }
 
-            $cartItems = $cart->items()->with('product')->get();
+            $cartItems = $cart->items()->with(['product' => function ($query) {
+                $query->lockForUpdate();
+            }])->get();
 
             // 1. Validate stock
             $errors = $this->validationService->validateItems($cartItems);

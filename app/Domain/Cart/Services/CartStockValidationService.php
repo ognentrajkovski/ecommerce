@@ -18,6 +18,11 @@ class CartStockValidationService
         foreach ($cartItems as $item) {
             $product = $item->product;
 
+            if ($product === null) {
+                $errors[$item->id] = "One of the items in your cart is no longer available.";
+                continue;
+            }
+
             if ($item->quantity > $product->stock) {
                 $errors[$item->id] = "Insufficient stock for {$product->name}. Only {$product->stock} available.";
             }
