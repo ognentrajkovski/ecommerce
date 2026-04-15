@@ -7,9 +7,7 @@ use Livewire\Volt\Volt;
 
 Volt::route('/', 'market.index')->name('market.index');
 
-Route::get('/products/{product}', function (string $product): \Illuminate\Contracts\View\View {
-    return view('welcome', ['product' => $product]);
-})->name('products.show');
+Volt::route('/products/{product}', 'market.show')->name('products.show');
 
 Route::middleware('guest')->group(function (): void {
     Volt::route('/login', 'auth.login')->name('login');
@@ -27,7 +25,8 @@ Route::middleware('auth')->group(function (): void {
 });
 
 Route::middleware(['auth', 'role:vendor'])->group(function (): void {
-    Route::view('/vendor/products', 'welcome')->name('vendor.products.index');
+    Volt::route('/vendor/products', 'vendor.products.index')->name('vendor.products.index');
+    Volt::route('/vendor/products/create', 'vendor.products.create')->name('vendor.products.create');
     Route::view('/vendor/orders', 'welcome')->name('vendor.orders.index');
 });
 
