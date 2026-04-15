@@ -13,6 +13,8 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+    protected $model = User::class;
+
     /**
      * The current password being used by the factory.
      */
@@ -42,6 +44,13 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function vendor(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRole::Vendor->value,
         ]);
     }
 }
