@@ -1,6 +1,8 @@
 <?php
 
 use App\Domain\ProductCatalog\Models\Product;
+use App\Domain\Cart\Actions\AddToCartAction;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
@@ -8,6 +10,8 @@ new #[Layout('components.layouts.app')] class extends Component {
     public Product $product;
 
     public int $quantity = 1;
+
+    public bool $addedToCart = false;
 
     public function mount(Product $product): void
     {
@@ -28,9 +32,20 @@ new #[Layout('components.layouts.app')] class extends Component {
         }
     }
 
-    public function addToCart(): void
+    public function addToCart(AddToCartAction $action): void
     {
-        $this->dispatch('notify', message: 'Add to cart coming soon.');
+        if (!Auth::check()) {
+            $this->redirectRoute('login');
+            return;
+        }
+
+        try {
+            $action->execute(Auth::user(), $this->product, $this->quantity);
+            $this->addedToCart = true;
+            $this->dispatch('notify', message: 'Added to cart!');
+        } catch (\RuntimeException $e) {
+            $this->dispatch('notify', message: $e->getMessage());
+        }
     }
 };
 ?>
@@ -59,9 +74,9 @@ new #[Layout('components.layouts.app')] class extends Component {
             type="button"
             wire:click="addToCart"
             @disabled($product->stock <= 0)
-            class="rounded-md bg-black px-4 py-2 text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+            class="rounded-md border border-black px-4 py-2 font-medium transition-colors disabled:cursor-not-allowed disabled:border-transparent disabled:bg-gray-300 disabled:text-white {{ $this->addedToCart ? 'bg-white text-black' : 'bg-black text-white' }}"
         >
-            Add to Cart
+            {{ $this->addedToCart ? 'Added to Cart' : 'Add to Cart' }}
         </button>
     </div>
 </div>

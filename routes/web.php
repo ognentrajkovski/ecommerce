@@ -31,7 +31,7 @@ Route::middleware(['auth', 'role:vendor'])->group(function (): void {
 });
 
 Route::middleware(['auth', 'role:buyer'])->group(function (): void {
-    Route::view('/cart', 'welcome')->name('cart.index');
-    Route::view('/checkout', 'welcome')->name('checkout.index');
+    Volt::route('/cart', 'cart.index')->name('cart.index');
+    Volt::route('/checkout', 'checkout.index')->name('checkout.index');
     Route::view('/orders', 'welcome')->name('buyer.orders.index');
 });

@@ -4,6 +4,9 @@ use App\Domain\ProductCatalog\Models\Vendor;
 use App\Domain\ProductCatalog\Services\MarketplaceSearchService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use App\Domain\Cart\Actions\AddToCartAction;
+use App\Domain\ProductCatalog\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
@@ -18,6 +21,8 @@ new #[Layout('components.layouts.app')] class extends Component {
     public string $min_price = '';
 
     public string $max_price = '';
+
+    public array $addedToCartMap = [];
 
     public function updatingKeyword(): void
     {
@@ -57,9 +62,23 @@ new #[Layout('components.layouts.app')] class extends Component {
             ->get();
     }
 
-    public function addToCart(string $productId): void
+    public function addToCart(string $productId, AddToCartAction $action): void
     {
-        $this->dispatch('notify', message: "Add to cart for {$productId} coming soon.");
+        if (!Auth::check()) {
+            $this->redirectRoute('login');
+            return;
+        }
+
+        $product = Product::find($productId);
+        if (!$product) return;
+
+        try {
+            $action->execute(Auth::user(), $product, 1);
+            $this->addedToCartMap[$productId] = true;
+            $this->dispatch('notify', message: 'Added to cart!');
+        } catch (\RuntimeException $e) {
+            $this->dispatch('notify', message: $e->getMessage());
+        }
     }
 };
 ?>
@@ -121,9 +140,9 @@ new #[Layout('components.layouts.app')] class extends Component {
                     type="button"
                     wire:click="addToCart('{{ $product->id }}')"
                     @disabled($product->stock <= 0)
-                    class="mt-4 w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+                    class="mt-4 w-full rounded-md border border-black px-3 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:border-transparent disabled:bg-gray-300 disabled:text-white {{ !empty($this->addedToCartMap[$product->id]) ? 'bg-white text-black' : 'bg-black text-white' }}"
                 >
-                    Add to Cart
+                    {{ !empty($this->addedToCartMap[$product->id]) ? 'Added to Cart' : 'Add to Cart' }}
                 </button>
             </div>
         @empty
