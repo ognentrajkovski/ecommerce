@@ -27,10 +27,11 @@ Route::middleware('auth')->group(function (): void {
 Route::middleware(['auth', 'role:vendor'])->group(function (): void {
     Volt::route('/vendor/products', 'vendor.products.index')->name('vendor.products.index');
     Volt::route('/vendor/products/create', 'vendor.products.create')->name('vendor.products.create');
+    Volt::route('/vendor/products/{product}/edit', 'vendor.products.edit')->name('vendor.products.edit');
     Volt::route('/vendor/orders', 'vendor.orders.index')->name('vendor.orders.index');
 });
 
-Route::middleware(['auth', 'role:buyer'])->group(function (): void {
+Route::middleware(['auth', 'role:buyer,vendor'])->group(function (): void {
     Volt::route('/cart', 'cart.index')->name('cart.index');
     Volt::route('/checkout', 'checkout.index')->name('checkout.index');
     Volt::route('/orders', 'buyer.orders.index')->name('buyer.orders.index');

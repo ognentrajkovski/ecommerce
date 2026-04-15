@@ -18,6 +18,8 @@
                         <a href="/cart" class="text-sm font-medium hover:text-gray-600">Cart</a>
                         <a href="/orders" class="text-sm font-medium hover:text-gray-600">My Orders</a>
                     @elseif(auth()->user()->role === \App\Domain\IdentityAndAccess\Enums\UserRole::Vendor)
+                        <a href="/cart" class="text-sm font-medium hover:text-gray-600">Cart</a>
+                        <a href="/orders" class="text-sm font-medium hover:text-gray-600">My Orders</a>
                         <a href="/vendor/products" class="text-sm font-medium hover:text-gray-600">My Products</a>
                         <a href="/vendor/orders" class="text-sm font-medium hover:text-gray-600">Manage Orders</a>
                     @endif

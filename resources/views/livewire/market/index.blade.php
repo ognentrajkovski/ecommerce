@@ -103,7 +103,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             <input
                 type="number"
                 min="0"
-                step="0.01"
+                step="10"
                 wire:model.live.debounce.300ms="min_price"
                 placeholder="Min price"
                 class="w-full rounded-md border px-3 py-2"
@@ -112,7 +112,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             <input
                 type="number"
                 min="0"
-                step="0.01"
+                step="10"
                 wire:model.live.debounce.300ms="max_price"
                 placeholder="Max price"
                 class="w-full rounded-md border px-3 py-2"
@@ -122,7 +122,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         @forelse($this->products as $product)
-            <div class="rounded-lg border bg-white p-4 shadow-sm">
+            <div class="rounded-lg border bg-white p-4 shadow-sm" wire:key="product-{{ $product->id }}">
                 <a href="{{ route('products.show', $product) }}">
                     <img
                         src="{{ $product->image_url ?: 'https://placehold.co/600x400?text=Product' }}"

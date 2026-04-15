@@ -9,6 +9,7 @@ use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.app')] class extends Component {
     public string $paymentMethod = 'credit_card';
+    public string $buttonState = 'default';
 
     public function getCartProperty()
     {
@@ -48,8 +49,10 @@ new #[Layout('components.layouts.app')] class extends Component {
 
         try {
             $checkoutService->checkout(Auth::user(), $method);
-            return redirect()->route('buyer.orders.index');
+            $this->buttonState = 'success';
+            $this->dispatch('order-placed');
         } catch (\RuntimeException $e) {
+            $this->buttonState = 'error';
             $this->dispatch('notify', message: $e->getMessage());
         }
     }
@@ -104,8 +107,19 @@ new #[Layout('components.layouts.app')] class extends Component {
                         </label>
                     </div>
 
-                    <button type="button" wire:click="placeOrder" class="mt-8 w-full rounded-md bg-black px-4 py-3 text-lg font-medium text-white transition-colors hover:bg-gray-800">
-                        Place Order
+                    <button 
+                        type="button" 
+                        wire:click="placeOrder" 
+                        class="mt-8 w-full rounded-md px-4 py-3 text-lg font-medium text-white transition-colors 
+                        {{ $buttonState === 'success' ? 'bg-green-600 hover:bg-green-700' : ($buttonState === 'error' ? 'bg-red-600 hover:bg-red-700' : 'bg-black hover:bg-gray-800') }}"
+                    >
+                        @if($buttonState === 'success')
+                            Order is placed
+                        @elseif($buttonState === 'error')
+                            Order not placed
+                        @else
+                            Place Order
+                        @endif
                     </button>
                     
                     <p class="mt-4 text-center text-xs text-gray-500">Totals exceeding $999.00 will automatically be declined by simulation parameters.</p>
@@ -114,3 +128,13 @@ new #[Layout('components.layouts.app')] class extends Component {
         </div>
     @endif
 </div>
+
+@script
+<script>
+    $wire.on('order-placed', () => {
+        setTimeout(() => {
+            window.location.href = "{{ route('buyer.orders.index') }}";
+        }, 1200);
+    });
+</script>
+@endscript

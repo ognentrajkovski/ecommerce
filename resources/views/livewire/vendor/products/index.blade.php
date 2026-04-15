@@ -62,7 +62,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                         <td class="px-4 py-3">${{ number_format((float) $product->price, 2) }}</td>
                         <td class="px-4 py-3">{{ $product->stock }}</td>
                         <td class="px-4 py-3 text-right">
-                            <button type="button" class="mr-2 rounded border px-3 py-1 text-sm text-gray-700">Edit</button>
+                            <a href="{{ route('vendor.products.edit', $product) }}" class="mr-2 inline-block rounded border px-3 py-1 text-sm text-gray-700 hover:bg-gray-50">Edit</a>
                             <button
                                 type="button"
                                 wire:click="deleteProduct('{{ $product->id }}')"

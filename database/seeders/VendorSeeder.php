@@ -11,11 +11,21 @@ class VendorSeeder extends Seeder
 {
     public function run(): void
     {
+        $brands = ['Nike', 'Adidas', 'Jordan', 'NewBalance'];
+
         User::query()
             ->where('role', UserRole::Vendor->value)
             ->get()
-            ->each(function (User $user): void {
-                Vendor::factory()->for($user)->create();
+            ->each(function (User $user) use (&$brands): void {
+                $brand = array_shift($brands);
+                if ($brand) {
+                    Vendor::factory()->for($user)->create([
+                        'name' => $brand,
+                        'slug' => \Illuminate\Support\Str::slug($brand),
+                    ]);
+                } else {
+                    Vendor::factory()->for($user)->create();
+                }
             });
     }
 }
