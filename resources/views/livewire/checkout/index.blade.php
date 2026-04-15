@@ -95,11 +95,11 @@ new #[Layout('components.layouts.app')] class extends Component {
                     
                     <div class="space-y-4">
                         <label class="flex cursor-pointer items-center space-x-3">
-                            <input type="radio" wire:model="paymentMethod" value="credit_card" class="h-4 w-4 border-gray-300 text-black focus:ring-black">
+                            <input type="radio" name="paymentMethod" wire:model="paymentMethod" value="credit_card" class="h-4 w-4 border-gray-300 text-black focus:ring-black">
                             <span class="font-medium text-gray-900">Credit Card</span>
                         </label>
                         <label class="flex cursor-pointer items-center space-x-3">
-                            <input type="radio" wire:model="paymentMethod" value="wallet" class="h-4 w-4 border-gray-300 text-black focus:ring-black">
+                            <input type="radio" name="paymentMethod" wire:model="paymentMethod" value="wallet" class="h-4 w-4 border-gray-300 text-black focus:ring-black">
                             <span class="font-medium text-gray-900">Digital Wallet</span>
                         </label>
                     </div>
