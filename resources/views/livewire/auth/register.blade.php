@@ -3,7 +3,9 @@
 use App\Domain\IdentityAndAccess\Actions\RegisterUserAction;
 use App\Domain\IdentityAndAccess\Enums\UserRole;
 use Illuminate\Support\Facades\Auth;
-use function Livewire\Volt\{rules, state};
+use function Livewire\Volt\{layout, rules, state};
+
+layout('components.layouts.app');
 
 state([
     'name' => '',

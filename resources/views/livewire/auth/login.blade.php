@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use function Livewire\Volt\{rules, state};
+use function Livewire\Volt\{layout, rules, state};
+
+layout('components.layouts.app');
 
 state([
     'email' => '',
@@ -25,7 +27,7 @@ $login = function () {
 
     Session::regenerate();
 
-    $this->redirect('/', navigate: true);
+    $this->redirectRoute('market.index');
 };
 ?>
 

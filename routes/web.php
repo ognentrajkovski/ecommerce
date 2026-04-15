@@ -5,9 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::get('/', function (): \Illuminate\Contracts\View\View {
-    return view('welcome');
-})->name('market.index');
+Volt::route('/', 'market.index')->name('market.index');
 
 Route::get('/products/{product}', function (string $product): \Illuminate\Contracts\View\View {
     return view('welcome', ['product' => $product]);
